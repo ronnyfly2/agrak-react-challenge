@@ -1,0 +1,24 @@
+.TextField {
+	width: 100%;
+	margin: 8px 0 !important;
+	::placeholder {
+		color: #e0e0e0;
+	}
+	input{
+		color: #e0e0e0;
+		[type=text] {
+			color: #e0e0e0;
+		}
+	}
+	
+	label {
+		color: #e0e0e0;
+	}
+	fieldset {
+		border-color: #e0e0e0;
+	}
+}
+
+.ButtonCancel {
+	margin-right: 10px !important;
+}

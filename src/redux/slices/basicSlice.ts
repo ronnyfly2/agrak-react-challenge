@@ -4,7 +4,7 @@ import { RootState } from "../store";
 export const basicSlice = createSlice({
   name: "basic",
   initialState: {
-    message: "Happy Coding! 😋",
+    message: "Happy Coding mmm! 😋",
   },
   reducers: {
     changeMessage: (state, payload: PayloadAction<{ message: string }>) => {

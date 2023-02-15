@@ -16,8 +16,8 @@ export const CreateUserView = () => {
     navigate('/')
   }
 
-  const handleSubmit = (user:User) => {
-    saveUser(user)
+  const handleSubmit = async (user:User) => {
+    await saveUser(user)
     navigate('/')
   }
 

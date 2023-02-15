@@ -18,7 +18,6 @@ export const UpdateUserView = () => {
   const queryUser = useQuery({
     queryKey: ['user', id],
     queryFn: () => getUser(id),
-    retry: 1,
   })
 
   const handleBack = () => {
@@ -33,7 +32,7 @@ export const UpdateUserView = () => {
   return (
     <div>
       <h1>Edit User</h1>
-      <ButtonLink link={'/'} title={'Back'} />
+      <ButtonLink link={'/'} title={'Go back'} />
       {queryUser.isLoading ? <p>Loading...</p> : (
         <>
           <p>id: {queryUser.data?.id }</p>

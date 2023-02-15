@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { TextField, Button } from '@mui/material'
@@ -8,6 +9,7 @@ import md5 from 'blueimp-md5'
 
 import { User } from '../interfaces'
 import './../components/assets/styles/FormUser.css'
+import { ButtonDelete } from './ButtonDelete'
 
 const Form = styled.form`
   max-width: 500px;
@@ -27,7 +29,6 @@ type Props = {
 }
 
 export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
-
   const formik = useFormik({
     initialValues: userData || {
       first_name: '',
@@ -54,6 +55,13 @@ export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
 
   return (
     <Form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+      {
+        userData?.id && (
+          <Buttons style={{ marginBottom:'14px' }}>
+            <ButtonDelete id={userData.id} />
+          </Buttons>
+        )
+      }
       <TextField
         error={!!(formik.touched.first_name && formik.errors.first_name)}
         helperText={formik.errors.first_name}
@@ -91,7 +99,7 @@ export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
       />
 
 
-      <Button color="primary" onClick={()=>getAvatar(formik.values.email)}>Generate Avatar</Button>
+      <Button variant="contained" color="secondary" onClick={()=>getAvatar(formik.values.email)}>Generate Avatar</Button>
       {formik.values.avatar && <img src={formik.values.avatar} alt="avatar" width={400} />}
       <TextField
         error={!!(formik.touched.avatar && formik.errors.avatar)}
@@ -105,9 +113,10 @@ export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
         value={formik.values.avatar}
       />
 
-      <Buttons>
-        <Button className={'ButtonCancel'} color="error" onClick={handleCancel}>Cancel</Button>
-        <Button color="success" disabled={formik.isSubmitting || !formik.isValid} type='submit'>
+      <Buttons style={{ marginBottom:'34px' }}>
+        <Button variant="outlined" className={'ButtonCancel'} color="error" onClick={handleCancel}>Cancel</Button>
+
+        <Button variant="contained" color="success" disabled={formik.isSubmitting || !formik.isValid} type='submit'>
           Save
         </Button>
       </Buttons>

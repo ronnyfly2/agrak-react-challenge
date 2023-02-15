@@ -4,6 +4,8 @@ import * as Yup from 'yup'
 import { TextField, Button } from '@mui/material'
 import styled from '@emotion/styled'
 
+import md5 from 'blueimp-md5'
+
 import { User } from '../interfaces'
 import './../components/assets/styles/FormUser.css'
 
@@ -19,11 +21,13 @@ const Buttons = styled.div`
 `;
 
 type Props = {
-  userData?: User,
+  userData?: User | undefined,
   handleSubmit: Function,
   handleCancel: React.MouseEventHandler
 }
+
 export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
+
   const formik = useFormik({
     initialValues: userData || {
       first_name: '',
@@ -34,13 +38,19 @@ export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
     validationSchema: Yup.object({
       first_name: Yup.string().required('First name is required'),
       second_name: Yup.string().required('Second name is required'),
-      email: Yup.string().email('Invalid email address').required('Email is required'),
+      email: Yup.string().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i,'Invalid email address').email().required('Email is required'),
       avatar: Yup.string().required('Avatar is required'),
     }),
     onSubmit: values => {
       handleSubmit({...values });
     },
   })
+
+  const getAvatar = async (email: string) => {
+    const encrypt = md5(email)
+    const link = await fetch(`https://www.gravatar.com/avatar/${encrypt}?d=robohash&f=y&s=420`)
+    formik.setFieldValue('avatar', link.url)
+  }
 
   return (
     <Form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -80,6 +90,9 @@ export const FormUser = ({ userData, handleCancel, handleSubmit }: Props)=> {
         value={formik.values.email}
       />
 
+
+      <Button color="primary" onClick={()=>getAvatar(formik.values.email)}>Generate Avatar</Button>
+      {formik.values.avatar && <img src={formik.values.avatar} alt="avatar" width={400} />}
       <TextField
         error={!!(formik.touched.avatar && formik.errors.avatar)}
         helperText={formik.errors.avatar}
